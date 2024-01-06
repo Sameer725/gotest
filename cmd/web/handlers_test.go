@@ -1,38 +1,48 @@
 package main
 
 import (
-	"bytes"
-	"io"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"snippetbox.samkha.com/internal/assert"
 )
 
 func TestPing(t *testing.T) {
-	rr := httptest.NewRecorder()
+	// unit test
+	// rr := httptest.NewRecorder()
 
-	r, err := http.NewRequest(http.MethodGet, "/", nil)
+	// r, err := http.NewRequest(http.MethodGet, "/", nil)
 
-	if err != nil {
-		t.Fatal(err)
-	}
+	// if err != nil {
+	// 	t.Fatal(err)
+	// }
 
-	ping(rr, r)
+	// ping(rr, r)
 
-	rs := rr.Result()
+	// rs := rr.Result()
 
-	assert.Equal[int](t, rs.StatusCode, http.StatusOK)
+	// assert.Equal[int](t, rs.StatusCode, http.StatusOK)
 
-	defer rs.Body.Close()
+	// defer rs.Body.Close()
 
-	body, err := io.ReadAll(rs.Body)
+	// body, err := io.ReadAll(rs.Body)
 
-	if err != nil {
-		t.Fatal(err)
-	}
-	body = bytes.TrimSpace(body)
+	// if err != nil {
+	// 	t.Fatal(err)
+	// }
+	// body = bytes.TrimSpace(body)
 
-	assert.Equal[string](t, string(body), "OK")
+	// assert.Equal[string](t, string(body), "OK")
+
+	//e2e
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+
+	defer ts.Close()
+
+	code, _, body := ts.get(t, "/ping")
+
+	assert.Equal(t, code, http.StatusOK)
+	assert.Equal(t, body, "OK")
 }
