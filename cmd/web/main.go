@@ -24,8 +24,8 @@ type application struct {
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
 
-	users    *models.UserModel
-	snippets *models.SnippetModel
+	users    models.UserModelInterface
+	snippets models.SnippetModelInterface
 }
 
 func openDB(dsn string) (*sql.DB, error) {
